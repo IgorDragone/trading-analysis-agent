@@ -237,6 +237,31 @@ def test_gex_math():
     print("OK  GEX: gamma BS corretta, curva+flip+muri, gate della significativita'")
 
 
+def test_prompts_are_pure():
+    """
+    I file agentN_prompt.md vengono letti INTEGRALMENTE e inviati al modello
+    come system prompt (load_prompt() fa read_text()). Non devono quindi
+    contenere documentazione per lo sviluppatore: sprecherebbe token e darebbe
+    al modello istruzioni non rivolte a lui ("usa il modello piu' capace",
+    "chiamata all'API: system = il blocco qui sotto"...).
+    La spec completa vive in docs/agenteN_spec.md.
+    """
+    base = Path(__file__).resolve().parent.parent / "agents"
+    marcatori = ("## A cosa serve questo file", "nota per lo sviluppatore",
+                 "Nota per lo sviluppatore", "ISTRUZIONI PER L'AGENTE",
+                 "Modello consigliato", "```")
+    for n in (1, 2, 3):
+        p = base / f"agent{n}_prompt.md"
+        testo = p.read_text(encoding="utf-8")
+        for m in marcatori:
+            assert m not in testo, (
+                f"agent{n}_prompt.md contiene '{m}': e' documentazione, non "
+                f"prompt. Spostala in docs/agente{n}_spec.md.")
+        assert testo.lstrip().startswith("RUOLO"), (
+            f"agent{n}_prompt.md deve iniziare con 'RUOLO'")
+    print("OK  i prompt caricati contengono solo il prompt (niente documentazione)")
+
+
 if __name__ == "__main__":
     test_golden_rule_windows()
     test_cvd_only_direction()
@@ -249,4 +274,5 @@ if __name__ == "__main__":
     test_gamma_compacted_for_agents()
     test_agent3_view_and_message()
     test_gex_math()
+    test_prompts_are_pure()
     print("\nTutti i test offline superati.")
