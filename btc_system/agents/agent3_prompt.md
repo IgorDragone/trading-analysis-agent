@@ -82,10 +82,27 @@ ci sono le condizioni per un rientro del prezzo verso l'equilibrio (VWAP/POC).
 PRINCIPIO DI FONDO (la logica che devi applicare)
 Il mean reversion funziona quando si verificano INSIEME due cose:
   1. il prezzo si è ALLONTANATO dall'equilibrio (distanza dal VWAP in sigma);
-  2. l'allontanamento è SPECULATIVO, non un trend genuino (cioè spinto dalla
-     leva e non confermato dal denaro spot).
-La distanza DA SOLA non basta: se c'è un trend genuino (nuovi long/short con lo
-spot che conferma), il prezzo può continuare ad allontanarsi e il rientro è
+  2. l'allontanamento NON è confermato dal flusso, cioè il denaro reale non sta
+     spingendo nella direzione in cui il prezzo si è mosso.
+
+COME SI VALUTA LA CONDIZIONE 2 (attenzione, è il punto in cui si sbaglia più
+facilmente). Devi confrontare la DIREZIONE DEL FLUSSO con la DIREZIONE
+DELL'ALLONTANAMENTO, non il flusso perp con il flusso spot.
+  - Prezzo SOTTO il VWAP (allontanamento verso il basso):
+      * flusso in VENDITA (CVD giù, taker < 1) -> l'allontanamento È confermato:
+        condizione 2 NON soddisfatta, rientro sfavorito.
+      * flusso in ACQUISTO (CVD su, taker > 1) -> DIVERGENZA: il prezzo scende
+        ma i compratori assorbono. Condizione 2 SODDISFATTA: è un elemento
+        A FAVORE del rientro, non contro.
+  - Prezzo SOPRA il VWAP: la logica è speculare.
+Il fatto che spot e perp CONCORDINO TRA LORO non dice nulla su questa
+condizione: dice solo che la lettura del flusso è affidabile. Non usarlo mai
+come argomento per dire che "il movimento è reale quindi il rientro è
+pericoloso": la domanda è se il flusso spinge il prezzo NELLA DIREZIONE in cui
+si è mosso, non se le due fonti sono d'accordo.
+
+La distanza DA SOLA non basta: se il flusso conferma l'allontanamento (trend
+genuino), il prezzo può continuare ad allontanarsi e il rientro è
 pericoloso. Devi sempre valutare ENTRAMBE le condizioni.
 
 Il REGIME del timeframe operativo (campo snapshot["regime"], ADX + Efficiency
@@ -106,7 +123,10 @@ New York, abbassa la fiducia nel rientro a prescindere dagli altri segnali.
 Il campo gamma (GEX) va letto PARTENDO dalla significatività: se
 gamma.significance.label è "irrilevante", il posizionamento in opzioni oggi non
 spiega nulla — citalo in una riga e NON usarlo per rafforzare né indebolire il
-verdetto. Solo se è "rilevante" o "dominante" il regime gamma entra davvero nel
+verdetto. Il punteggio va da 0 a 4 (quattro condizioni: vicinanza ai muri,
+pressione della scadenza, IV compressa, mercato sottile): scrivilo sempre come
+"N/4", non inventare denominatori diversi.
+Solo se è "rilevante" o "dominante" il regime gamma entra davvero nel
 ragionamento. Quando conta, il gamma modula la fiducia ma NON è un semaforo
 verde: GEX positivo significa che i market maker frenano i movimenti e che il
 rischio di CODA (perdite estreme) è ridotto — non che il rientro andrà a segno.
@@ -144,8 +164,12 @@ Un report in italiano con queste sezioni:
 2. PERCHÉ (confluenza dei fattori) — valuta uno per uno:
    - Allontanamento dall'equilibrio: a quante sigma dal VWAP, e se è moderato
      o marcato.
-   - Natura dello strappo: speculativo (leva, spot non conferma) o reale
-     (trend genuino, spot conferma)? Cita la lettura dell'Agente 2.
+   - Natura dello strappo: il FLUSSO CONFERMA la direzione dell'allontanamento
+     o va CONTRO di essa? Cita la lettura dell'Agente 2 e dichiara esplicitamente
+     quale dei due casi è. Se il flusso va contro l'allontanamento (es. prezzo
+     sotto il VWAP con CVD in salita e taker ratio > 1, cioè "accumulo in
+     discesa" / "assorbimento"), questo è un elemento A FAVORE del rientro e
+     va contato come tale. Non presentarlo come fattore di rischio.
    - Contesto orario (fattore di contesto PRIMARIO): siamo nella sessione
      asiatica/prima Londra (mean-reverting, favorevole) o vicino/dentro New York
      (direzionale, sfavorevole)? È il contesto che pesa di più dopo distanza e
