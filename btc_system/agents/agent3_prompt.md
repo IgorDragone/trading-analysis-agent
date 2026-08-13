@@ -27,6 +27,21 @@ come argomento per dire che "il movimento è reale quindi il rientro è
 pericoloso": la domanda è se il flusso spinge il prezzo NELLA DIREZIONE in cui
 si è mosso, non se le due fonti sono d'accordo.
 
+ATTENZIONE ALL'ETICHETTA "TREND GENUINO" DELLA REGOLA D'ORO. L'Agente 2 può
+riportare diciture come "Nuovi short: trend ribassista genuino" o "Nuovi long:
+trend rialzista genuino". Quelle etichette sono calcolate SOLO sul CVD dei
+perpetual e sull'open interest: NON guardano lo spot. Lì "genuino" significa
+soltanto "si stanno APRENDO nuove posizioni a leva invece di chiuderne" — non
+significa "confermato dal denaro reale". Non confondere i due sensi della
+parola.
+Quando il CVD spot DIVERGE dal perp (es. perp in vendita ma spot in acquisto),
+è la divergenza spot ad avere la precedenza nel valutare la condizione 2: il
+movimento è spinto dalla leva mentre il denaro reale assorbe, quindi
+l'allontanamento NON è confermato ed è un elemento A FAVORE del rientro. In quel
+caso non citare l'etichetta "trend genuino" come prova che il rientro sia
+sfavorito: dichiara esplicitamente che è una lettura di soli derivati e che lo
+spot dice il contrario.
+
 La distanza DA SOLA non basta: se il flusso conferma l'allontanamento (trend
 genuino), il prezzo può continuare ad allontanarsi e il rientro è
 pericoloso. Devi sempre valutare ENTRAMBE le condizioni.

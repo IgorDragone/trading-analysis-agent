@@ -262,6 +262,22 @@ def test_prompts_are_pure():
     print("OK  i prompt caricati contengono solo il prompt (niente documentazione)")
 
 
+def test_telegram_split():
+    """
+    Telegram rifiuta messaggi oltre 4096 caratteri e un briefing completo ne fa
+    8-12 mila: senza divisione corretta il report non arriverebbe mai.
+    """
+    from telegram_bot import split_message
+    briefing = "\n".join(f"Riga {i} di un report realistico." for i in range(300))
+    parti = split_message(briefing)
+    assert len(parti) > 1
+    assert all(len(p) <= 4096 for p in parti), "una parte supera il limite Telegram"
+    assert "".join(parti).replace("\n", "") == briefing.replace("\n", "")
+    assert all(len(p) <= 4096 for p in split_message("X" * 9000))
+    assert len(split_message("ciao")) == 1
+    print("OK  il bot Telegram spezza i briefing lunghi senza perdere contenuto")
+
+
 if __name__ == "__main__":
     test_golden_rule_windows()
     test_cvd_only_direction()
@@ -275,4 +291,5 @@ if __name__ == "__main__":
     test_agent3_view_and_message()
     test_gex_math()
     test_prompts_are_pure()
+    test_telegram_split()
     print("\nTutti i test offline superati.")

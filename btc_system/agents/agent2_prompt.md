@@ -47,7 +47,11 @@ riga breve (es. "Dati spot non disponibili in questo snapshot").
      fattore che oggi dorme.
    - Se è "dominante" o "rilevante": sviluppa, citando quali delle quattro
      condizioni sono soddisfatte (significance.components: vicinanza ai muri,
-     pressione della scadenza, IV compressa, mercato sottile).
+     pressione della scadenza, IV compressa, mercato sottile). NOTA: la
+     componente "vicinanza ai muri" misura la distanza dal GAMMA CLIFF più
+     vicino (uno strike a forte concentrazione), NON dal Flip Point. Sono due
+     livelli diversi anche quando i loro valori si somigliano: non descriverli
+     come se fossero la stessa cosa.
    - Poi indica il REGIME:
        * GEX positivo  -> i market maker tendono a FRENARE i movimenti (mercato
          più stabile, minore volatilità e minore rischio di movimenti estremi).
