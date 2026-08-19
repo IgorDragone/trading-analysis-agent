@@ -15,6 +15,7 @@ context metrics, and passes the result to specialized Anthropic-powered agents.
   - Agent 1: market snapshot.
   - Agent 2: flow and positioning.
   - Agent 3: mean-reversion conditions and context.
+- Provides a private Telegram bot interface for requesting reports from a VPS.
 
 ## Architecture
 
@@ -34,6 +35,7 @@ btc_system/
   agents/          Anthropic agent wrappers and prompts
   storage/         JSON and SQLite snapshot persistence
   tests/           offline regression tests
+  telegram_bot.py  Telegram long-polling interface
   run_agent*.py    CLI entry points for the three agents
 ```
 
@@ -61,6 +63,17 @@ python3 run_agent1.py --source synthetic --no-agent
 python3 run_agent2.py --source synthetic --no-agent
 python3 run_agent3.py --source synthetic --no-agent
 ```
+
+Optional Telegram bot:
+
+```bash
+export TELEGRAM_BOT_TOKEN="..."
+export TELEGRAM_ALLOWED_IDS="123456789"
+export ANTHROPIC_API_KEY="..."
+python3 telegram_bot.py
+```
+
+The bot uses long polling and only responds to whitelisted chat IDs.
 
 ## Notes
 
