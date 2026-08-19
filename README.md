@@ -39,6 +39,20 @@ btc_system/
   run_agent*.py    CLI entry points for the three agents
 ```
 
+## Entry Points
+
+Operational workflows are exposed through executable scripts in `btc_system/`:
+
+- `run_agent1.py`: generates the market snapshot report.
+- `run_agent2.py`: generates the flow and positioning report.
+- `run_agent3.py`: runs the full three-agent briefing.
+- `telegram_bot.py`: starts the private Telegram long-polling bot.
+- `collect_snapshot.py`: collects and stores a snapshot without generating reports.
+- `download_history.py`: downloads historical Binance futures candles.
+- `check_sources.py`: checks optional spot and Deribit/GEX data sources.
+- `run_regime.py`: runs a quick regime detector check.
+- `run_semaphores.py`: runs a quick operational semaphores check.
+
 ## Quick Start
 
 ```bash
