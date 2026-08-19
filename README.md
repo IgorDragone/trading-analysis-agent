@@ -89,6 +89,14 @@ python3 telegram_bot.py
 
 The bot uses long polling and only responds to whitelisted chat IDs.
 
+## Deployment
+
+The Telegram interface is designed to run as a long-lived process on a VPS. It
+uses long polling, so it does not require public webhooks, open inbound ports, a
+domain, or SSL certificates. Runtime secrets and access control are configured
+through environment variables, and access is restricted to whitelisted Telegram
+chat IDs.
+
 ## Notes
 
 This is an analysis and reporting system, not an automated trading bot. It does
