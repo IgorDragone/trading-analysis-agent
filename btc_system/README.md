@@ -20,7 +20,8 @@ di mercato direttamente. Questo evita dati disallineati e rate limit sprecati.
 ## Stato attuale
 
 Il sistema include collector Binance futures, integrazioni best-effort per spot
-e Deribit/GEX, tre agenti specializzati e test offline della pipeline.
+e Deribit/GEX, tre agenti specializzati, test offline della pipeline e un bot
+Telegram privato per richiedere briefing da telefono.
 
 Avvio rapido:
 
@@ -37,6 +38,26 @@ python3 check_sources.py                   # diagnostica spot + Deribit/GEX
 
 I report vengono salvati in `data/reports/`, mentre gli snapshot finiscono come
 JSON e record SQLite in `data/`. Le directory runtime sono ignorate da Git.
+
+Bot Telegram opzionale:
+
+```bash
+export TELEGRAM_BOT_TOKEN="..."
+export TELEGRAM_ALLOWED_IDS="123456789"
+export ANTHROPIC_API_KEY="..."
+python3 telegram_bot.py
+```
+
+Il bot usa long polling, quindi non richiede webhook, dominio, certificato SSL o
+porte aperte. Risponde solo ai chat id presenti in `TELEGRAM_ALLOWED_IDS`.
+Comandi principali:
+
+```text
+/report [nota]  -> briefing completo Agente 1 + 2 + 3
+/flusso [nota]  -> solo Agente 1 + 2
+/stato          -> stato archivio snapshot
+/aiuto          -> elenco comandi
+```
 
 ## Dati storici (per le analisi statistiche)
 
@@ -67,10 +88,12 @@ quando gli archivi Binance usano microsecondi. Modulo:
 - [x] **Fase 3 / Collector v2 Deribit**: catena opzioni -> GEX/gamma calcolato
       in casa con curva, flip, muri, DVOL e punteggio di significativita'.
       Diagnostica: `python3 check_sources.py`.
+- [x] **Interfaccia Telegram**: bot privato via long polling, whitelist tramite
+      `TELEGRAM_ALLOWED_IDS`, comandi `/report`, `/flusso`, `/stato`.
 - [ ] **Fase 4**: modulo confluenze nell'engine -> rafforza l'Agente 3
       (indicatore di REGIME trend/laterale gia' presente: `engine/regime.py`;
       da includere anche un tasso di reazione per zona vs baseline casuale)
-- [ ] **Fase 5**: orchestratore + scheduler + invio briefing (es. Telegram)
+- [ ] **Fase 5**: scheduler/automazione operativa e deploy stabile su VPS
 
 ## Note di design
 
